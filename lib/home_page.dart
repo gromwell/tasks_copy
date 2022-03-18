@@ -1,6 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:tasks_copy/app_router.gr.dart';
 import 'package:tasks_copy/constants.dart';
-import 'package:tasks_copy/new_list_page.dart';
 import 'package:tasks_copy/tab_indicator_box_decoration.dart';
 import 'package:tasks_copy/task_view.dart';
 
@@ -35,7 +36,9 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  void onNewList() {}
+  void onNewList() {
+    context.router.push(const NewListRoute());
+  }
 
   @override
   Widget build(BuildContext context) {
