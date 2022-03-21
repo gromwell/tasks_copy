@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:tasks_copy/app_router.gr.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tasks_copy/application/task_lists/task_lists_bloc.dart';
 import 'package:tasks_copy/constants.dart';
-import 'package:tasks_copy/tab_indicator_box_decoration.dart';
-import 'package:tasks_copy/task_view.dart';
+import 'package:tasks_copy/presentation/pages/home/tab_indicator_box_decoration.dart';
+import 'package:tasks_copy/presentation/pages/home/tasks_view.dart';
+import 'package:tasks_copy/presentation/routes/app_router.gr.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -44,34 +46,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        bottom: TabBar(
-          controller: _tabController,
-          padding: const EdgeInsets.fromLTRB(
-            Constants.marginsLarge,
-            Constants.marginsNone,
-            Constants.marginsLarge,
-            Constants.marginsNone,
-          ),
-          labelPadding: const EdgeInsets.all(Constants.marginsLarge),
-          indicatorPadding: const EdgeInsets.fromLTRB(
-            Constants.marginsLarge,
-            Constants.marginsNone,
-            Constants.marginsLarge,
-            Constants.marginsNone,
-          ),
-          indicator: TabIndicatorBoxDecoration(
-            Theme.of(context).tabBarTheme.labelColor ?? Colors.white,
-          ),
-          isScrollable: true,
-          tabs: const [
-            Text('Home coding'),
-            Text('Praca'),
-            Text('W domu'),
-            Text('Motocykl'),
-            Text('Główna'),
-            Text('+ New List'),
-          ],
-        ),
+        bottom: TaskListTabBar(tabController: _tabController),
         title: const Center(
           child: Text('Tasks'),
         ),
@@ -112,6 +87,55 @@ class _HomePageState extends State<HomePage>
           ),
         ),
       ),
+    );
+  }
+}
+
+class TaskListTabBar extends StatefulWidget with PreferredSizeWidget {
+  const TaskListTabBar({
+    required TabController tabController,
+  }) : _tabController = tabController;
+
+  final TabController _tabController;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kTextTabBarHeight);
+
+  @override
+  State<TaskListTabBar> createState() => _TaskListTabBarState();
+}
+
+class _TaskListTabBarState extends State<TaskListTabBar> {
+  @override
+  Widget build(BuildContext context) {
+    context.read<TaskListsBloc>().state.taskLists;
+    return TabBar(
+      controller: widget._tabController,
+      padding: const EdgeInsets.fromLTRB(
+        Constants.marginsLarge,
+        Constants.marginsNone,
+        Constants.marginsLarge,
+        Constants.marginsNone,
+      ),
+      labelPadding: const EdgeInsets.all(Constants.marginsLarge),
+      indicatorPadding: const EdgeInsets.fromLTRB(
+        Constants.marginsLarge,
+        Constants.marginsNone,
+        Constants.marginsLarge,
+        Constants.marginsNone,
+      ),
+      indicator: TabIndicatorBoxDecoration(
+        Theme.of(context).tabBarTheme.labelColor ?? Colors.white,
+      ),
+      isScrollable: true,
+      tabs: const [
+        Text('Home coding'),
+        Text('Praca'),
+        Text('W domu'),
+        Text('Motocykl'),
+        Text('Główna'),
+        Text('+ New List'),
+      ],
     );
   }
 }
